@@ -10,9 +10,21 @@ ig.use({
     client_id:'2d880c21672b4094aa86ef98c7a03064',
     client_secret:'8e905af2b92144aeae757ada649ab7ab'
 });
-/* GET users listing. */
-router.get('/', function(req, res, next) {
+var polular_cache = {};
+function get_most_popular(cb) {
+    if(popular_cache.media){
+        return cb(null, polular_cache.media,popular_cache.limit);
+    }
     ig.media_popular(function(err,media,limit){
+        polular_cache={
+            "media":media,
+            "limit":limit
+        }
+        return cb(err,media,limit);
+    });
+}
+router.get('/', function(req, res, next) {
+    get_most_popular()(function(err,media,limit){
         if(err){
             throw err;
         }
