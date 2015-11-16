@@ -6,20 +6,27 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var nconf = require('nconf');
 var winston = require('winston');
+var nunjucks = require('nunjucks');
 
 require('winston-mail').Mail;
 
-winston.add(winston.transports.Mail,{
-  "to":"",
-  "username":"",
-  "password":"",
-  "level":"error"
-})
+//winston.add(winston.transports.Mail,{
+//  "to":"",
+//  "username":"",
+//  "password":"",
+//  "level":"error"
+//})
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
 var app = express();
+
+
+nunjucks.configure('views',{
+  autoescape:true,
+  express:app
+})
 
 
 
@@ -44,10 +51,20 @@ nconf.defaults({
 
 //winston.info('debugging');
 winston.add(winston.transports.File,{"filename":"error.log","level":"error"})
-winston.error("errortest");
+
+var customLevels ={
+  "low":1,
+  "high":2
+}
+
+var customLevelLogger = new (winston.Logger)({
+  "levels":customLevels,
+  "transports":[new winston.transports.Console({"level":"low"})]
+});
+//winston.error("errortest");
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+app.set('view engine', 'html');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
