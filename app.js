@@ -5,11 +5,29 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var nconf = require('nconf');
+var winston = require('winston');
+
+require('winston-mail').Mail;
+
+winston.add(winston.transports.Mail,{
+  "to":"",
+  "username":"",
+  "password":"",
+  "level":"error"
+})
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
 var app = express();
+
+
+
+//nconf.overrides({
+//  "http":{
+//    "port":9000
+//  }
+//});
 
 nconf.argv({
   'p':{
@@ -24,6 +42,9 @@ nconf.defaults({
   }
 });
 
+//winston.info('debugging');
+winston.add(winston.transports.File,{"filename":"error.log","level":"error"})
+winston.error("errortest");
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');

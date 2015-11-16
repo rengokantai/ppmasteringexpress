@@ -13,6 +13,8 @@
     "jade": "~1.9.2",
     "morgan": "~1.5.1",
     "nconf": "^0.8.2",
-    "serve-favicon": "~2.2.0"
+    "serve-favicon": "~2.2.0",
+    "winston": "^2.1.0",
+    "winston-mail": "^1.0.0"
   }
 }
