@@ -12,13 +12,15 @@ ig.use({
 });
 var polular_cache = {};
 function get_most_popular(cb) {
-    if(popular_cache.media){
+    var timeout = 5;
+    if(popular_cache.media&&(new Date().getTime()<popular_cache.timeout)){
         return cb(null, polular_cache.media,popular_cache.limit);
     }
     ig.media_popular(function(err,media,limit){
         polular_cache={
             "media":media,
-            "limit":limit
+            "limit":limit,
+            "timeout":(+(new Date())) +(timeout * 1000)
         }
         return cb(err,media,limit);
     });
