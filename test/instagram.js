@@ -11,6 +11,13 @@ var ig2 = new Instagram('2d880c21672b4094aa86ef98c7a03064', '8e905af2b92144aeae7
 ig.get_most_popular = function (cb) {
     return cb(null, {"data": "incoming"}, 3);
 }
+beforeEach(function(){
+    this.sinon = sinon.sandbox.create();
+})
+
+afterEach(function(){
+    this.sinon.restore();
+})
 describe("credentials", function () {
     it("should be same id", function () {
         expect(ig.getClientId()).to.be("id");
@@ -28,14 +35,14 @@ describe("credentials", function () {
         });
     });
     it("should call fetch_from_cache", function (done) {
-        sinon.spy(ig, "fetch_from_cache");
+        this.sinon.spy(ig, "fetch_from_cache");
         ig.get_most_popular_with_cache(function (err, media, limit) {
             expect(ig.fetch_from_cache.callCount).to.be(1);
             done();
         });
     });
     it("should call fetch_from_cache", function (done) {
-        sinon.spy(ig, "fetch_from_cache");
+        this.sinon.spy(ig, "fetch_from_cache");
         ig.get_most_popular(function (err, media, limit) {
             expect(ig.fetch_from_cache.callCount).to.be(0);
             done();
